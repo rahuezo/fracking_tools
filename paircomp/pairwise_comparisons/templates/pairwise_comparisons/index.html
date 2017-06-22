@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'pairwise_comparisons/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'pairwise_comparisons/css/style.css' %}">
+    
+    <script src="{% static 'pairwise_comparisons/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'pairwise_comparisons/js/bootstrap.js' %}"></script>
+    <script src="{% static 'pairwise_comparisons/js/main.js' %}"></script>
+    
+    <title>PAIRCOMP</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+       <div class="container-fluid">
+         <!-- Brand and toggle get grouped for better mobile display -->
+         <div class="navbar-header">
+           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+             <span class="sr-only">Toggle navigation</span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">PAIRCOMP</a>
+         </div>
+     
+         <!-- Collect the nav links, forms, and other content for toggling -->
+         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+           
+           <ul class="nav navbar-nav navbar-right">
+             <li><a href="{% url 'pairwise_comparisons:index' %}" class="current">Home</a></li>
+           </ul>
+         </div><!-- /.navbar-collapse -->
+       </div><!-- /.container-fluid -->
+    </nav>
+    
+    <div class="container"> 
+        <h1 class="text-center">Let's Get Started</h1><br>
+
+        <div class="comparison-program">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% if upload_status %}
+                            Uploaded Comparison Files
+                        {% else %}
+                            Upload Files to Compare (only <b>.txt</b> or <b>.pdf</b>)
+                        {% endif %}
+
+                        <span class="glyphicon glyphicon-upload pull-right" aria-hidden="true" id="upload-icon"></span>
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+                    {% if not upload_status %}
+
+                    <form action="{% url 'pairwise_comparisons:multi_file_upload' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="file-selection center">
+                            <label class="btn btn-primary col-md-4 col-sm-4" for="comp-files-selector" id="upload-files-btn">
+                            <input id="comp-files-selector" type="file" name="comp-files" style="display:none"
+                            onchange="showNumberOfSelectedFiles(this)" multiple>
+                            Browse
+                            </label>
+                            <span class='label label-info' id="upload-comp-files-info">No Files Selected</span>
+                        </div>
+                        <br><br>
+                        <hr class="custom-hr">
+
+                        <div class="row text-center">
+                            <button type="submit" class="btn btn-success col-md-4 col-sm-4 center">Upload</button>
+                        </div>
+
+                    </form>
+
+                    {% else %}
+                        {% for url in uploaded_urls %}
+                            <div class="row text-center">
+                                <b>{{ url }}</b>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <br>
+
+            <!--UPLOAD THE SPREADSHEET-->
+
+            {% if upload_status %}
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% if upload_spreadsheet_status %}
+                            Uploaded Spreadsheet
+                        {% else %}
+                            Upload <b>.csv</b> spreadsheet with files to compare
+                        {% endif %}
+                        <span class="glyphicon glyphicon-question-sign pull-right" aria-hidden="true" id="csv-help"></span>
+                    </h3>
+
+                </div>
+                <div class="panel-body">
+                    {% if not upload_spreadsheet_status %}
+
+                    <form action="{% url 'pairwise_comparisons:spreadsheet_upload' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="file-selection center">
+                            <label class="btn btn-primary col-md-4 col-sm-4" for="my-file-selector" id="upload-file-btn">
+                                <input id="my-file-selector" type="file" name="comp-spreadsheet" style="display:none"
+                                onchange="$('#upload-file-info').html(this.files[0].name)">
+                                Browse
+                            </label>
+                            <span class='label label-info' id="upload-file-info">No File Selected</span>
+                        </div>
+                        <br><br>
+                        <hr class="custom-hr">
+
+                        <div class="row text-center">
+                            <button type="submit" class="btn btn-success col-md-4 col-sm-4 center">Upload</button>
+                        </div>
+                    </form>
+
+                    {% else %}
+
+                        <div class="row text-center">
+                                <b>{{ uploaded_spreadsheet_url }}</b>
+                        </div>
+
+                    {% endif %}
+                </div>
+            </div>
+
+            {% endif %}
+
+            <!--SPREADSHEET HANDLING-->
+
+            <br>
+
+            {% if comparison_status and upload_status and upload_spreadsheet_status %}
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Generate Document Comparison Summary
+                        <span class="glyphicon glyphicon-flash pull-right" aria-hidden="true" id="run-icon"></span>
+                    </h3>
+
+                </div>
+                <div class="panel-body">
+                    <form action="{% url 'pairwise_comparisons:generate_comparison_summary' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="col-md-4 center">
+                            <input class="form-control" type="text" name="csv_file_name" id="csv_file_name" placeholder="Output File Name">
+                        </div>
+                        <br>
+
+                        <hr class="custom-hr">
+
+                        <div class="row text-center">
+                            <button type="submit" class="btn btn-success col-md-4 col-sm-4 center">Generate</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% endif %}
+
+            <div id="example-csv" class="alert alert-info" role="alert" style="display:none;">
+                <h4 class="text-center">Correct .csv Format</h4>
+                <table style="width:75%;" class="table table-bordered table-striped table-condensed center">
+                    <tr>
+                        <th>File A Path</th>
+                        <th>File B Path</th>
+                    </tr>
+
+                    <tr>
+                        <td>doc1.pdf</td>
+                        <td>doc2.pdf</td>
+                    </tr>
+                    <tr>
+                        <td>doc3.pdf</td>
+                        <td>doc4.pdf</td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+	</div> <!--container-->
+    
+
+
+
+</body>
+</html>
