@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from django.conf import settings
 import csv
 import os
@@ -35,7 +36,12 @@ def multi_file_upload(request):
             'uploaded_urls': [url.split('/')[-1].replace('%20', ' ') for url in uploaded_urls],
         }
 
+        # return HttpResponseRedirect(reverse('pairwise_comparisons:multi_file_upload'))
         return render(request, 'pairwise_comparisons/index.html', context)
+
+
+def multi_file_upload_success(request):
+    pass
 
 
 def spreadsheet_upload(request):
@@ -63,10 +69,7 @@ def spreadsheet_upload(request):
 
 
 def generate_comparison_summary(request):
-    print "\n\n\n BEfore error"
     csv_file_name = request.POST.get('csv_file_name') + '.csv'
-    print csv_file_name
-    print "\n\n\n After error\n\n\n"
     csv_file_path = os.path.join(settings.MEDIA_ROOT, csv_file_name)
 
     with open(csv_file_path, 'wb') as csv_file:
@@ -74,22 +77,36 @@ def generate_comparison_summary(request):
 
         writer.writerow(['File A Path', 'File B Path'])
 
-    return render(request, 'pairwise_comparisons/index.html')
+    fs = FileSystemStorage()
+
+    uploaded_csv_url = [f for f in os.listdir(fs.location) if csv_file_name in f][0]
+    uploaded_urls = [f for f in os.listdir(fs.location) if not f.lower().endswith('.csv')]
+
+    context = {
+        'upload_status': True,
+        'upload_spreadsheet_status': True,
+        'comparison_status': True,
+        'uploaded_spreadsheet_url': uploaded_csv_url,
+        'uploaded_urls': uploaded_urls,
+        'compared': True,
+        'comparison_csv_file': csv_file_name,
+    }
+
+    return render(request, 'pairwise_comparisons/index.html', context)
 
 
 def download_comparison_summary(request):
-    # context = {
-    #     'upload_status': True,
-    #     'upload_spreadsheet_status': True,
-    #
-    # }
-    # return render(request, 'pairwise_comparisons/index.html')
 
-    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    csv_file_to_download = request.POST.get('csv-file-download')
+    csv_file_to_download_path = settings.MEDIA_ROOT + '/' + csv_file_to_download
 
-    if os.path.exists(file_path):
-        with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-            return render(request, 'pairwise_comparisons/index.html')
-    raise Http40
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="{0}"'.format(csv_file_to_download)
+
+    with open(csv_file_to_download_path, 'rb') as csv_file:
+        response = HttpResponse(csv_file.read())
+        response['content_type'] = 'text/csv'
+        response['Content-Disposition'] = 'attachment;filename={0}'.format(csv_file_to_download)
+
+        return response
+
