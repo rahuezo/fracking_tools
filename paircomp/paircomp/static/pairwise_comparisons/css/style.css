@@ -250,7 +250,6 @@ button.send-btn:active:focus {
 
 }
 
-
 .label.label-info {
     font-size: 22px;
     float: right;
@@ -269,7 +268,6 @@ button.send-btn:active:focus {
 
 .glyphicon.glyphicon-upload {
     color: #AAA;
-    top: -2px;
 }
 
 .glyphicon.glyphicon-flash {
@@ -284,6 +282,7 @@ button.send-btn:active:focus {
     width: 25%;
     border-radius: 0px;
     float: right;
+    top: -100px;
 }
 
 #example-csv h4 {
@@ -293,29 +292,5 @@ button.send-btn:active:focus {
 .table.table-striped {
     background-color: #CCC;
 }
-/*
-.file {
-  visibility: hidden;
-  position: absolute;
-}
 
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
-}*/
+/* handling upload style */

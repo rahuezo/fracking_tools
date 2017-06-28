@@ -13,22 +13,3 @@ function showNumberOfSelectedFiles(element) {
         '<span id="comp-selected-files">' + files.length + ' Files Selected</span>'
     );
 }
-
-(function() {
-
-    $('form > input').keyup(function() {
-
-        var empty = false;
-        $('form > input').each(function() {
-            if ($(this).val() == '') {
-                empty = true;
-            }
-        });
-
-        if (empty) {
-            $('#multi-file-btn').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
-        } else {
-            $('#multi-file-btn').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
-        }
-    });
-})()
