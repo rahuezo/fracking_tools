@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'tools_home/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'tools_home/css/style.css' %}">
+    
+    <script src="{% static 'tools_home/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'tools_home/js/bootstrap.js' %}"></script>
+    <script src="{% static 'tools_home/js/main.js' %}"></script>
+    
+    <title>Fracking Tools</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+       <div class="container-fluid">
+         <!-- Brand and toggle get grouped for better mobile display -->
+         <div class="navbar-header">
+           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+             <span class="sr-only">Toggle navigation</span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Fracking Tools</a>
+         </div>
+     
+         <!-- Collect the nav links, forms, and other content for toggling -->
+
+       </div><!-- /.container-fluid -->
+    </nav>
+    
+    <div class="container"> 
+        <h1 class="text-center" id="page-message">What do you want to do?</h1><br>
+        
+        <!--BUILD AND COMPARE NETWORKS-->
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Build and Compare Networks</h3>
+            </div>
+            <div class="panel-body">
+              
+              <div class="row text-center">
+                <dl>
+                  <dt>There are two ways to build a network:</dt>
+                  
+                  <dd>1. From an <a href="" data-toggle="modal" data-target="#event_spreadsheet_modal">event attendance spreadsheet</a></dd>
+                  <dd>2. From a <a href="" data-toggle="modal" data-target="#pairwise_relationship_modal">pairwise relationship spreadsheet</a></dd><br>
+                    <div class="row text-center">
+                      <button type="button" class="btn btn-danger btn-lg">
+                        Build
+                      </button>
+                    </div><br>
+                  
+                  <dt>There are two network comparison methods: </dt>
+                  <dd>1. Compare a single pair of networks</dd>
+                  <dd>2. Compare multiple pairs of networks</dd><br>
+                    <div class="row text-center">
+                      <button type="button" class="btn btn-success btn-lg">Compare</button>
+                    </div>
+                </dl>
+              </div>
+              
+            </div>
+        </div><br>
+        
+        <!--END BUILD AND COMPARE NETWORKS-->
+        
+        
+        <!--COMPARE DOCUMENTS-->
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Compare Documents</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{% url 'pairwise_comparisons:index' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row text-center">
+                        <button type="submit" class="btn btn-success btn-lg">Start</button>
+                    </div>
+                </form>              
+            </div>
+        </div><br>
+        
+        <!--END COMPARE DOCUMENTS-->
+        
+        <!-- Modal -->
+        
+        <div id="event_spreadsheet_modal" class="modal fade" role="dialog">
+          <div class="modal-dialog">        
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Event Attendance Spreadsheet Example</h4>
+              </div>
+              <div class="modal-body">
+                <table style="width:75%;" class="table table-bordered table-striped table-condensed center">
+                    <tr>
+                        <th>Event 1</th>
+                        <th>Event 2</th>
+                        <th>Event 3</th>
+                        <th>Event 4</th>
+                    </tr>
+
+                    <tr>
+                        <td>Person A</td>
+                        <td>Person B</td>
+                        <td>Person C</td>
+                        <td>Person D</td>
+                    </tr>
+                    <tr>
+                        <td>Person B</td>
+                        <td>Person C</td>
+                        <td>Person D</td>
+                        <td>Person A</td>
+                    </tr>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+        
+          </div>
+        </div>
+        
+        <div id="pairwise_relationship_modal" class="modal fade" role="dialog">
+          <div class="modal-dialog">        
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Pairwise Relationship Spreadsheet Example</h4>
+              </div>
+              <div class="modal-body">
+                <table style="width:75%;" class="table table-bordered table-striped table-condensed center">
+                    <tr>
+                        <th>Person 1</th>
+                        <th>Person 2</th>
+                    </tr>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>Michael Smith</td>
+                    </tr>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>Jane Doe</td>
+                    </tr>
+                    <tr>
+                        <td>Jane Doe</td>
+                        <td>Jim Adams</td>
+                    </tr>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+        
+          </div>
+        </div>
+        
+	</div> <!--container-->
+
+</body>
+</html>

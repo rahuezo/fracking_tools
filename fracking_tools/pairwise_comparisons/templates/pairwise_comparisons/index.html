@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'pairwise_comparisons/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'pairwise_comparisons/css/style.css' %}">
+    
+    <script src="{% static 'pairwise_comparisons/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'pairwise_comparisons/js/bootstrap.js' %}"></script>
+    <script src="{% static 'pairwise_comparisons/js/main.js' %}"></script>
+    
+    <title>PAIRCOMP</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+       <div class="container-fluid">
+         <!-- Brand and toggle get grouped for better mobile display -->
+         <div class="navbar-header">
+           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+             <span class="sr-only">Toggle navigation</span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">PAIRCOMP</a>
+         </div>
+     
+         <!-- Collect the nav links, forms, and other content for toggling -->
+
+       </div><!-- /.container-fluid -->
+    </nav>
+    
+    <div class="container"> 
+        <h1 class="text-center" id="page-message">Let's Get Started</h1><br>
+
+        <div class="comparison-program">
+            <div id="comparison-container">
+
+
+            <form action="{% url 'pairwise_comparisons:file_upload' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <span class="glyphicon glyphicon-upload pull-right" id="upload-icon" aria-hidden="true"></span>
+                            1. Choose Comparison Files
+                        </h3>
+
+                    </div>
+
+                    <div class="panel-body">
+                            <p>
+                                {{ form.doc_file }}
+                            </p>
+                    </div>
+
+
+                </div> <!--panel primary 1-->
+
+                <br>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <span class="glyphicon glyphicon-question-sign pull-right" aria-hidden="true" id="csv-help"></span>
+                            2. Choose a <b>.csv</b> Spreadsheet with Files to Compare
+                        </h3>
+                    </div>
+
+
+                <div class="panel-body">
+                    <p>
+                        {{ form.csv_file }}
+                    </p>
+                </div>
+
+            </div> <!--panel primary-->
+            <br>
+            <!--comparison summary-->
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        3. Generate Document Comparison Summary
+                        <span class="glyphicon glyphicon-flash pull-right" aria-hidden="true" id="run-icon"></span>
+                    </h3>
+
+                </div>
+
+                <div class="panel-body">
+
+
+                    <div class="col-md-4 center">
+                        <input class="form-control" type="text" name="csv_file_name" id="csv_file_name" placeholder="Output File Name">
+                    </div>
+                    <br>
+
+                    <hr class="custom-hr">
+
+                    <div class="row text-center">
+                        <button type="submit" class="btn btn-success col-md-4 col-sm-4 center">Generate</button>
+                    </div>
+                </div>
+            </div>
+            </form>
+            </div>
+
+            <br>
+
+            {% if messages %}
+
+            <form action="{% url 'pairwise_comparisons:index' %}" method="post">
+                {% csrf_token %}
+                <div class="row text-center" id="new-comparison">
+
+                </div>
+            </form>
+
+            <br>
+
+            <!--<div class="row text-center">-->
+                            <!--<input type="submit" class="btn btn-success col-md-4 col-sm-4 center" value="Download {{ message }}">-->
+                        <!--</div>-->
+            <script>
+                $('#comparison-container').hide();
+                $('#page-message').html('');
+                $('#new-comparison').append('<input type="submit" class="btn btn-primary" value="New Comparison">');
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Download Document Comparison Summary
+                        <span class="glyphicon glyphicon-download pull-right" aria-hidden="true" id="run-icon"></span>
+                    </h3>
+
+                </div>
+                <div class="panel-body">
+                    {% for message in messages %}
+
+                    <form action="{% url 'pairwise_comparisons:download_comparison_summary' %}" method="post">
+                        {% csrf_token %}
+
+                        <input type="hidden" value="{{ message }}" name="csv-file-download">
+                        <div class="row text-center">
+                            <input type="submit" class="btn btn-success col-md-4 col-sm-4 center" value="Download {{ message }}">
+                        </div>
+
+                    </form>
+
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% endif %}
+        </div> <!--comparison program-->
+
+        <div id="example-csv" class="alert alert-info" role="alert" style="display:none;">
+                <h4 class="text-center">Correct .csv Format</h4>
+                <table style="width:75%;" class="table table-bordered table-striped table-condensed center">
+                    <tr>
+                        <th>File A Path</th>
+                        <th>File B Path</th>
+                    </tr>
+
+                    <tr>
+                        <td>doc1.pdf</td>
+                        <td>doc2.pdf</td>
+                    </tr>
+                    <tr>
+                        <td>doc3.pdf</td>
+                        <td>doc4.pdf</td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+	</div> <!--container-->
+
+</body>
+</html>
