@@ -11,7 +11,7 @@
     <script src="{% static 'tools_home/js/bootstrap.js' %}"></script>
     <script src="{% static 'tools_home/js/main.js' %}"></script>
     
-    <title>Fracking Tools</title>
+    <title>NETCOMP</title>
 </head>
 
 <body>
@@ -25,7 +25,7 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
            </button>
-           <a class="navbar-brand" href="#">Fracking Tools</a>
+           <a class="navbar-brand" href="#">NETCOMP</a>
          </div>
      
          <!-- Collect the nav links, forms, and other content for toggling -->
@@ -40,28 +40,28 @@
         
         <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Build and Compare Networks</h3>
+              <h3 class="panel-title">Build Networks</h3>
             </div>
             <div class="panel-body">
               
               <div class="row text-center">
                 <dl>
-                  <dt>There are two ways to build a network:</dt>
+                  <dt>Build networks from <a href="" data-toggle="modal" data-target="#event_spreadsheet_modal">event attendance spreadsheets</a></dt><br>
                   
-                  <dd>1. From an <a href="" data-toggle="modal" data-target="#event_spreadsheet_modal">event attendance spreadsheet</a></dd>
-                  <dd>2. From a <a href="" data-toggle="modal" data-target="#pairwise_relationship_modal">pairwise relationship spreadsheet</a></dd><br>
                     <div class="row text-center">
-                      <button type="button" class="btn btn-danger btn-lg">
-                        Build
+                      <button type="button" class="btn btn-success btn-lg">
+                        Start
                       </button>
                     </div><br>
                   
-                  <dt>There are two network comparison methods: </dt>
-                  <dd>1. Compare a single pair of networks</dd>
-                  <dd>2. Compare multiple pairs of networks</dd><br>
+                  <dt>Build networks from <a href="" data-toggle="modal" data-target="#pairwise_relationship_modal">pairwise relationship spreadsheets</a></dt><br>
+                  
                     <div class="row text-center">
-                      <button type="button" class="btn btn-success btn-lg">Compare</button>
+                      <button type="button" class="btn btn-danger btn-lg">
+                        Start
+                      </button>
                     </div>
+                  
                 </dl>
               </div>
               
@@ -69,26 +69,6 @@
         </div><br>
         
         <!--END BUILD AND COMPARE NETWORKS-->
-        
-        
-        <!--COMPARE DOCUMENTS-->
-        
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title">Compare Documents</h3>
-            </div>
-            <div class="panel-body">
-                <form action="{% url 'pairwise_comparisons:index' %}" method="post">
-                    {% csrf_token %}
-                    <div class="row text-center">
-                        <button type="submit" class="btn btn-success btn-lg">Start</button>
-                    </div>
-                </form>
-                <a href="{% url 'pairwise_comparisons:index' %}" >{% url 'pairwise_comparisons:index' %}</a>
-            </div>
-        </div><br>
-        
-        <!--END COMPARE DOCUMENTS-->
         
         <!-- Modal -->
         
@@ -101,6 +81,13 @@
                 <h4 class="modal-title">Event Attendance Spreadsheet Example</h4>
               </div>
               <div class="modal-body">
+                
+            <dl>
+                <dt>How to name your file:</dt>
+                <dd>- [UNIQUE LABEL] network_relationships.csv</dd>
+                <dd>- Ex. <b>San Jose network_relationships.csv</b></dd>
+            </dl>     
+                
                 <table style="width:75%;" class="table table-bordered table-striped table-condensed center">
                     <tr>
                         <th>Event 1</th>
@@ -140,6 +127,12 @@
                 <h4 class="modal-title">Pairwise Relationship Spreadsheet Example</h4>
               </div>
               <div class="modal-body">
+                
+                <dl>
+                    <dt>How to name your file:</dt>
+                    <dd>- [UNIQUE LABEL] network_rel_pairs.csv</dd>
+                    <dd>- Ex. <b>San Jose network_rel_pairs.csv</b></dd>
+                </dl>
                 <table style="width:75%;" class="table table-bordered table-striped table-condensed center">
                     <tr>
                         <th>Person 1</th>

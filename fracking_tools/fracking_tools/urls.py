@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^pairwise_comparisons/', include('pairwise_comparisons.urls')),
     url(r'^tools_home/', include('tools_home.urls')),
+    url(r'^netcomp/', include('netcomp.urls')),
     url(r'^admin/', admin.site.urls),
 ]
 

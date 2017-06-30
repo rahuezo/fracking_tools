@@ -11,7 +11,7 @@
     <script src="{% static 'tools_home/js/bootstrap.js' %}"></script>
     <script src="{% static 'tools_home/js/main.js' %}"></script>
     
-    <title>Fracking Tools</title>
+    <title>NETCOMP</title>
 </head>
 
 <body>
@@ -25,7 +25,7 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
            </button>
-           <a class="navbar-brand" href="#">Fracking Tools</a>
+           <a class="navbar-brand" href="#">NETCOMP > Event Attendance Networks</a>
          </div>
      
          <!-- Collect the nav links, forms, and other content for toggling -->
@@ -34,61 +34,103 @@
     </nav>
     
     <div class="container"> 
-        <h1 class="text-center" id="page-message">What do you want to do?</h1><br>
+        <h1 class="text-center" id="page-message">Let's Get Started</h1><br>
+        <div id="network-build-container">
+        <form action="{% url 'netcomp:file_upload' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
         
-        <!--BUILD AND COMPARE NETWORKS-->
-        
+        <!--CHOOSE EVENT FILES-->
         <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Build and Compare Networks</h3>
+              <h3 class="panel-title">
+                <span class="glyphicon glyphicon-upload pull-right" id="upload-icon" aria-hidden="true"></span>
+                1. Choose Event Files
+              </h3>
             </div>
-            <div class="panel-body">
-              
-              <div class="row text-center">
-                <dl>
-                  <dt>There are two ways to build a network:</dt>
-                  
-                  <dd>1. From an <a href="" data-toggle="modal" data-target="#event_spreadsheet_modal">event attendance spreadsheet</a></dd>
-                  <dd>2. From a <a href="" data-toggle="modal" data-target="#pairwise_relationship_modal">pairwise relationship spreadsheet</a></dd><br>
-                    <div class="row text-center">
-                      <button type="button" class="btn btn-danger btn-lg">
-                        Build
-                      </button>
-                    </div><br>
-                  
-                  <dt>There are two network comparison methods: </dt>
-                  <dd>1. Compare a single pair of networks</dd>
-                  <dd>2. Compare multiple pairs of networks</dd><br>
-                    <div class="row text-center">
-                      <button type="button" class="btn btn-success btn-lg">Compare</button>
-                    </div>
-                </dl>
-              </div>
-              
+            <div class="panel-body">              
+              {{ form.csv_file }}
             </div>
         </div><br>
         
-        <!--END BUILD AND COMPARE NETWORKS-->
+        <!--END CHOOSE EVENT FILES-->
         
-        
-        <!--COMPARE DOCUMENTS-->
+        <!--CHOOSE OUTPUT ZIP NAME-->
         
         <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Compare Documents</h3>
+              <h3 class="panel-title">2. Choose Output <b>.zip</b> Name</h3>
             </div>
             <div class="panel-body">
-                <form action="{% url 'pairwise_comparisons:index' %}" method="post">
-                    {% csrf_token %}
-                    <div class="row text-center">
-                        <button type="submit" class="btn btn-success btn-lg">Start</button>
-                    </div>
-                </form>
-                <a href="{% url 'pairwise_comparisons:index' %}" >{% url 'pairwise_comparisons:index' %}</a>
+                <div class="col-md-4 center">
+                    <input class="form-control" type="text" name="output_zip_name" id="output_zip_name" placeholder="Output .zip Name">
+                </div>
             </div>
         </div><br>
         
-        <!--END COMPARE DOCUMENTS-->
+        <!--END CHOOSE OUTPUT ZIP NAME-->
+        
+        <!--CREATE NETWORKS-->
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">3. Create Networks</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row text-center">
+                    <button type="submit" class="btn btn-success col-md-4 col-sm-4 center">Run</button>
+                </div>
+            </div>
+        </div><br>
+        
+        <!--END CREATE NETWORKS-->
+        
+        </form>
+    </div>
+        
+        <!--SHOW AFTER SUCCESSFUL UPLOAD-->
+        
+        {% if messages %}
+
+            <form action="{% url 'netcomp:build_networks_from_events' %}" method="post">
+                {% csrf_token %}
+                <div class="row text-center" id="new-build">
+
+                </div>
+            </form>
+            <br>
+            
+            <script>
+                $('#network-build-container').hide();
+                $('#page-message').html('');
+                $('#new-build').append('<input type="submit" class="btn btn-primary" value="Start Again">');
+            </script>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Download Networks
+                        <span class="glyphicon glyphicon-download pull-right" aria-hidden="true" id="run-icon"></span>
+                    </h3>
+
+                </div>
+                <div class="panel-body">
+                    {% for message in messages %}
+
+                    <form action="{% url 'netcomp:download_events_zip' %}" method="post">
+                        {% csrf_token %}
+
+                        <input type="hidden" value="{{ message }}" name="zip-file-download">
+                        <div class="row text-center">
+                            <input type="submit" class="btn btn-success col-md-6 col-sm-6 center" value="Download {{ message }}">
+                        </div>
+
+                    </form>
+
+                    {% endfor %}
+                </div>
+            </div>
+
+        {% endif %}
         
         <!-- Modal -->
         
@@ -101,6 +143,13 @@
                 <h4 class="modal-title">Event Attendance Spreadsheet Example</h4>
               </div>
               <div class="modal-body">
+                
+            <dl>
+                <dt>How to name your file:</dt>
+                <dd>- [UNIQUE LABEL] network_relationships.csv</dd>
+                <dd>- Ex. <b>San Jose network_relationships.csv</b></dd>
+            </dl>     
+                
                 <table style="width:75%;" class="table table-bordered table-striped table-condensed center">
                     <tr>
                         <th>Event 1</th>
@@ -140,6 +189,12 @@
                 <h4 class="modal-title">Pairwise Relationship Spreadsheet Example</h4>
               </div>
               <div class="modal-body">
+                
+                <dl>
+                    <dt>How to name your file:</dt>
+                    <dd>- [UNIQUE LABEL] network_rel_pairs.csv</dd>
+                    <dd>- Ex. <b>San Jose network_rel_pairs.csv</b></dd>
+                </dl>
                 <table style="width:75%;" class="table table-bordered table-striped table-condensed center">
                     <tr>
                         <th>Person 1</th>

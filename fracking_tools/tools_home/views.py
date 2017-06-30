@@ -8,3 +8,4 @@ def index(request):
     context = {}
     
     return render(request, 'tools_home/index.html', context)
+
