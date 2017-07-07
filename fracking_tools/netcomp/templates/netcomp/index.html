@@ -18,16 +18,33 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
        <div class="container-fluid">
          <!-- Brand and toggle get grouped for better mobile display -->
-         <div class="navbar-header">
+        <div class="navbar-header">
            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
              <span class="sr-only">Toggle navigation</span>
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
            </button>
-           <a class="navbar-brand" href="#">NETCOMP</a>
-         </div>
-     
+           <a class="navbar-brand" href="{% url 'tools_home:index' %}">Fracking Tools</a>
+        </div>
+         
+        <ul class="nav navbar-nav navbar-right">
+            
+            <li class="dropdown netcomp">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">NETCOMP<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'netcomp:index' %}">NETCOMP: Home</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{% url 'netcomp:build_networks_from_events' %}">Build Network From Events</a></li>
+                    <li><a href="{% url 'netcomp:build_networks_from_pairs' %}">Build Network From Node Pairs</a></li>
+                    <!--<li role="separator" class="divider"></li>-->
+                    <!--<li><a href="{% url 'netcomp:build_networks_from_pairs' %}">Compare Networks</a></li>-->
+                </ul>
+            </li>
+            
+            <li><a href="{% url 'pairwise_comparisons:index' %}">PAIRCOMP</a></li>
+        </ul>
+
          <!-- Collect the nav links, forms, and other content for toggling -->
 
        </div><!-- /.container-fluid -->
@@ -48,18 +65,15 @@
                 <dl>
                   <dt>Build networks from <a href="" data-toggle="modal" data-target="#event_spreadsheet_modal">event attendance spreadsheets</a></dt><br>
                   
-                    <div class="row text-center">
-                      <button type="button" class="btn btn-success btn-lg">
-                        Start
-                      </button>
+                    <div class="row text-center">                      
+                      <a href="{% url 'netcomp:build_networks_from_events' %}" class="btn btn-danger btn-lg">Start</a>
                     </div><br>
                   
                   <dt>Build networks from <a href="" data-toggle="modal" data-target="#pairwise_relationship_modal">pairwise relationship spreadsheets</a></dt><br>
                   
                     <div class="row text-center">
-                      <button type="button" class="btn btn-danger btn-lg">
-                        Start
-                      </button>
+                      
+                      <a href="{% url 'netcomp:build_networks_from_pairs' %}" class="btn btn-success btn-lg">Start</a>
                     </div>
                   
                 </dl>
@@ -161,6 +175,12 @@
         </div>
         
 	</div> <!--container-->
-
+    
+    <footer class="footer">
+      <div class="container">
+        <p>Email: <a href="mailto:rahuezo@ucdavis.edu">rahuezo@ucdavis.edu</a></p>
+        <p class="text-muted">Copyright © 2017 Fracking Tools by Rudy Huezo</p>
+      </div>
+    </footer>
 </body>
 </html>

@@ -18,16 +18,33 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
        <div class="container-fluid">
          <!-- Brand and toggle get grouped for better mobile display -->
-         <div class="navbar-header">
+        <div class="navbar-header">
            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
              <span class="sr-only">Toggle navigation</span>
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
            </button>
-           <a class="navbar-brand" href="#">Fracking Tools</a>
-         </div>
-     
+           <a class="navbar-brand" href="{% url 'tools_home:index' %}">Fracking Tools</a>
+        </div>
+         
+        <ul class="nav navbar-nav navbar-right">
+            
+            <li class="dropdown netcomp">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">NETCOMP<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'netcomp:index' %}">NETCOMP: Home</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{% url 'netcomp:build_networks_from_events' %}">Build Network From Events</a></li>
+                    <li><a href="{% url 'netcomp:build_networks_from_pairs' %}">Build Network From Node Pairs</a></li>
+                    <!--<li role="separator" class="divider"></li>-->
+                    <!--<li><a href="" class="coming-soon">Compare Networks</a></li>-->
+                </ul>
+            </li>
+            
+            <li><a href="{% url 'pairwise_comparisons:index' %}">PAIRCOMP</a></li>
+        </ul>
+
          <!-- Collect the nav links, forms, and other content for toggling -->
 
        </div><!-- /.container-fluid -->
@@ -40,7 +57,7 @@
         
         <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Build and Compare Networks</h3>
+              <h3 class="panel-title">NETCOMP: Build and Compare Networks</h3>
             </div>
             <div class="panel-body">
               
@@ -50,17 +67,19 @@
                   
                   <dd>1. From an <a href="" data-toggle="modal" data-target="#event_spreadsheet_modal">event attendance spreadsheet</a></dd>
                   <dd>2. From a <a href="" data-toggle="modal" data-target="#pairwise_relationship_modal">pairwise relationship spreadsheet</a></dd><br>
-                    <div class="row text-center">
-                      <button type="button" class="btn btn-danger btn-lg">
-                        Build
-                      </button>
+                    <div class="row text-center">                      
+                      <a href="{% url 'netcomp:build_networks_from_events' %}" class="btn btn-danger btn-lg">Build from Events</a><br> <br>
+                      <a href="{% url 'netcomp:build_networks_from_pairs' %}" class="btn btn-danger btn-lg">Build from Node Pairs</a><br>
                     </div><br>
                   
+                  <h1 class="text-danger">Under Construction</h1>
+                  <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                   <dt>There are two network comparison methods: </dt>
                   <dd>1. Compare a single pair of networks</dd>
                   <dd>2. Compare multiple pairs of networks</dd><br>
                     <div class="row text-center">
-                      <button type="button" class="btn btn-success btn-lg">Compare</button>
+                      
+                      <a href="{% url 'netcomp:index' %}" class="btn btn-default btn-lg disabled" aria-disabled="true">Compare Networks</a>
                     </div>
                 </dl>
               </div>
@@ -75,16 +94,29 @@
         
         <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">Compare Documents</h3>
+              <h3 class="panel-title">PAIRCOMP: Compare Documents</h3>
             </div>
             <div class="panel-body">
+                
+                <div class="row text-center">
+                    <dl>
+                      <dt>This utility allows you to compare documents in two ways:</dt>
+                  
+                        <dd>1. Compare <a href="" data-toggle="modal" data-target="#document_compare_modal1">content similarity</a> of two documents</dd>
+                        <dd>2. Compare <a href="" data-toggle="modal" data-target="#document_compare_modal2">textual similarity</a> of two documents</dd>
+                  
+                          
+                  
+                    
+                    </dl>
+                </div>
                 <form action="{% url 'pairwise_comparisons:index' %}" method="post">
                     {% csrf_token %}
                     <div class="row text-center">
-                        <button type="submit" class="btn btn-success btn-lg">Start</button>
+                        <button type="submit" class="btn btn-success btn-lg">Compare Documents</button>
                     </div>
                 </form>
-                <a href="{% url 'pairwise_comparisons:index' %}" >{% url 'pairwise_comparisons:index' %}</a>
+                <!--<a href="{% url 'pairwise_comparisons:index' %}" >{% url 'pairwise_comparisons:index' %}</a>-->
             </div>
         </div><br>
         
@@ -167,7 +199,113 @@
           </div>
         </div>
         
+        <div id="document_compare_modal1" class="modal fade" role="dialog">
+          <div class="modal-dialog">        
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Calculating the Content Similarity of 2 Documents</h4>
+              </div>
+              <div class="modal-body">
+                
+                <dl>
+                  <dt>Vector Space Model (VSM)</dt>                  
+                  <dd>In information retrieval or text mining, the <a href="http://en.wikipedia.org/wiki/Tf%E2%80%93idf">term frequency-inverse document frequency</a>
+                  (<b>tf-idf</b>), is a well known method to determine how important a word is in a document.                  
+                  </dd><br>
+                  
+                  <dd><b>VSM</b> is an algebraic model representing textual information as a vector. The components of this vector in our case represent the importance and presence
+                  (<a href="http://en.wikipedia.org/wiki/Bag_of_words_model">Bag of Words</a>) of a term in a document (i.e. tf-idf). VSM represents the features extracted from the document.                  
+                  </dd><br>
+                  
+                  <dt>Cosine Similarity</dt>
+                  <dd>Since documents can be modeled as vectors of term frequencies (i.e. numbers) we can perform math operations on them.</dd><br>
+                  <dd>A well-known similarity measure for vectors is called the <b>cosine similarity</b>. Cosine similarity emerges from the <a href="https://en.wikipedia.org/wiki/Dot_product">dot product</a>
+                  of two vectors.
+                  
+                  <br><br>
+                  
+                    <div class="row text-center">
+                        <a href="http://www.codecogs.com/eqnedit.php?latex=\inline&space;\LARGE&space;\overrightarrow{a}\cdot\overrightarrow{b}&space;=&space;\left&space;\|&space;a&space;\right&space;\|\left&space;\|&space;b&space;\right&space;\|cos\theta" target="_blank"><img src="http://latex.codecogs.com/gif.latex?\inline&space;\LARGE&space;\overrightarrow{a}\cdot\overrightarrow{b}&space;=&space;\left&space;\|&space;a&space;\right&space;\|\left&space;\|&space;b&space;\right&space;\|cos\theta" title="\LARGE \overrightarrow{a}\cdot\overrightarrow{b} = \left \| a \right \|\left \| b \right \|cos\theta" /></a>
+                    </div>                  
+                  <br><br>                  
+                  </dd>
+                  
+                  <dd>We can rearrange this equation so that the cosine part is left isolated</dd><br>
+                  
+                  <div class="row text-center">
+                    <a href="http://www.codecogs.com/eqnedit.php?latex=\inline&space;\LARGE&space;\textrm{Cosine&space;Similarity}&space;=&space;cos\theta=\frac{\overrightarrow{a}\cdot\overrightarrow{b}}{\left&space;\|&space;a&space;\right&space;\|\left&space;\|&space;b&space;\right&space;\|}" target="_blank"><img src="http://latex.codecogs.com/gif.latex?\inline&space;\LARGE&space;\textrm{Cosine&space;Similarity}&space;=&space;cos\theta=\frac{\overrightarrow{a}\cdot\overrightarrow{b}}{\left&space;\|&space;a&space;\right&space;\|\left&space;\|&space;b&space;\right&space;\|}" title="\LARGE \textrm{Cosine Similarity} = cos\theta=\frac{\overrightarrow{a}\cdot\overrightarrow{b}}{\left \| a \right \|\left \| b \right \|}" /></a>
+                  </div><br><br>
+                    <dd> The cosine term has a range from -1 to +1 that depends on the value of &theta; (the angle between the two vectors). If the angle between the two vectors is small
+                    (close to 0) then the cosine of this angle is at its maximum at +1 meaning the two vectors are pointing in the same direction. If the angle is 90&deg;, then cosine is 0 meaning the vectors are perpendicular to each other.
+                    If the between the vectors is 180&deg;, then the cosine is -1 meaning the vectors are pointing in opposite directions. 
+                    </dd><br>
+                    
+                    <dd>If the vectors we're working with are document vectors, having a cosine of +1 means the documents are talking about the same topic. If their cosine is 0, then
+                    the documents aren't talking about the same topic at all. Finally, if the cosine is -1, the documents are talking about completely opposite topics. 
+                    
+                    </dd>
+                </dl>
+              
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+        
+          </div>
+        </div>
+        
+        <div id="document_compare_modal2" class="modal fade" role="dialog">
+          <div class="modal-dialog">        
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Calculating the Textual Similarity of 2 Documents</h4>
+              </div>
+              <div class="modal-body">
+                
+                <dl>
+                  <dt>Near Duplicate Detection</dt>
+                  <dd>To detect whether two documents are almost identical, first we reduce each document to a set of strings and then use Jaccard similarity to
+                  calculate the similarity of those sets.
+                  </dd><br>
+                  
+                  <dd>To reduce a document to a set of strings, a technique called <b>shingling</b> is used.
+                  Shingling extracts the set of all substrings of length k (k-shingles) from a text.
+                  This is implemented by sliding a window of size k over the input document character by character and throwing the substrings into a set.
+                  For example, the document "abcabcac" yields the 3-shingles {"abc", "bca", "cab", "cac"}. This set eliminates duplicate shingles.
+                  </dd><br>
+                  
+                  <dt>Jaccard Similarity</dt>
+                  <dd>Jaccard similarity is a measure for expressing the similarity of sets. For sets A and B, it is defined as</dd><br><br>
+                  
+                  <div class="row text-center">
+                    <a href="http://www.codecogs.com/eqnedit.php?latex=\inline&space;\LARGE&space;\textrm{SIM(A,B)}&space;:=&space;\frac{|A&space;\cap&space;B&space;|}{|A&space;\cup&space;B&space;|}" target="_blank"><img src="http://latex.codecogs.com/gif.latex?\inline&space;\LARGE&space;\textrm{SIM(A,B)}&space;:=&space;\frac{|A&space;\cap&space;B&space;|}{|A&space;\cup&space;B&space;|}" title="\LARGE \textrm{SIM(A,B)} := \frac{|A \cap B |}{|A \cup B |}" /></a>
+                  </div><br><br>
+                  
+                  <dd>This is the ratio of the size of the intersection of two documents and the size of their union. In other words, the ratio of the number of words that are found
+                  in BOTH doucments and the total number of unique words in BOTH documents.</dd>
+                </dl>
+              
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+        
+          </div>
+        </div>
+        
 	</div> <!--container-->
-
+    
+    <footer class="footer">
+      <div class="container">
+        <p>Email: <a href="mailto:rahuezo@ucdavis.edu">rahuezo@ucdavis.edu</a></p>
+        <p class="text-muted">Copyright © 2017 Fracking Tools by Rudy Huezo</p>
+      </div>
+    </footer>
 </body>
 </html>

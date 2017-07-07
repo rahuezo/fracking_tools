@@ -7,18 +7,51 @@ import random
 import re
 
 class AdjacencyMatrix:
-	def __init__(self, events_file, output_dir='.',  attributes=None):
-		self.events_file = events_file.replace('\\', '/')
-		self.output_file_name = self.events_file.replace('network_relationships', 'adjacency_matrix') #'/' + events_file.split('/')[-1].split('_')[0] + '_adjacency_matrix.csv'
-		self.att_output_file_name = '/' + events_file.split('/')[-1].split(' ')[0] + 'attribute_adjacency_matrix.csv'
-				
-		self.out_dir = output_dir
+	def __init__(self, events_file, output_dir='.',  attributes=None, csv_type='events'):
 		
-		self.output_file = self.output_file_name.lower()
-		self.att_output_file = self.out_dir + self.att_output_file_name.lower()
+		self.csv_type = csv_type
 		
-		self.attributes = attributes
+		if self.csv_type == 'events': 
+			self.events_file = events_file.replace('\\', '/')
+			self.output_file_name = self.events_file.replace('_events', 'adjacency_matrix') #'/' + events_file.split('/')[-1].split('_')[0] + '_adjacency_matrix.csv'
+			self.att_output_file_name = '/' + events_file.split('/')[-1].split(' ')[0] + 'attribute_adjacency_matrix.csv'
+					
+			self.out_dir = output_dir
 			
+			self.output_file = self.output_file_name.lower()
+			self.att_output_file = self.out_dir + self.att_output_file_name.lower()
+			
+			self.attributes = attributes
+		
+		elif self.csv_type == 'pairs':
+			self.events_file = events_file.replace('\\', '/')
+			self.output_file_name = self.events_file.replace('_node_pairs', 'adjacency_matrix') #'/' + events_file.split('/')[-1].split('_')[0] + '_adjacency_matrix.csv'
+			self.att_output_file_name = '/' + events_file.split('/')[-1].split(' ')[0] + 'attribute_adjacency_matrix.csv'
+					
+			self.out_dir = output_dir
+			
+			self.output_file = self.output_file_name.lower()
+			self.att_output_file = self.out_dir + self.att_output_file_name.lower()
+			
+			self.attributes = attributes
+	
+	def build_network_from_pairs(self):
+		self.network = nx.Graph()
+		
+		with open(self.events_file, 'rb') as pairs_file: 
+			reader = csv.reader(pairs_file, delimiter=',')
+			
+			pairs = [row for row in reader][1:]
+			
+		for pair in pairs:
+			actorA = ' '.join(re.findall(r'[aA0-zZ9]+', pair[0]))
+			actorB = ' '.join(re.findall(r'[aA0-zZ9]+', pair[1]))
+			
+			self.network.add_edge(actorA, actorB)
+			
+		self.labels = sorted(self.network.nodes())
+		self.pos = nx.spring_layout(self.network)
+		
 	def build_network(self):
 		self.network = nx.Graph()
 		
@@ -135,7 +168,13 @@ class AdjacencyMatrix:
 			node_B = edge[1]
 			
 			self.network[node_A][node_B]['stance'] = int(self.network.node[node_A]['stance'])*int(self.network.node[node_B]['stance'])
+	
+	def run_pairs(self):
+		self.build_network_from_pairs()
+		matfile = self.save_matrix()
 		
+		return matfile
+	
 	def run(self):
 		self.build_network()
 		matfile = self.save_matrix()

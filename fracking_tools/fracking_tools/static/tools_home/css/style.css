@@ -13,6 +13,7 @@
 
 body {
 	padding-top: 50px;
+	background-color: #FFF8AC; 
 }
 
 .navbar {
@@ -21,15 +22,26 @@ body {
 	background-color: #111;
 	border-color: #000;
 	padding-left: 10%;
-	padding-right: 10%; 
+	padding-right: 10%;
+	height: 50px; 
 }
 
 .nav.navbar-nav.navbar-right a{
-	color: #FFF; 
+	color: #FFF;
+	font-size: 18px; 
+}
+
+body > nav > div > ul > li.dropdown.netcomp.open > ul > li > a {
+	color: #000; 
+}
+
+body > nav > div > ul > li.dropdown.netcomp.open > ul > li > a:hover {
+	color: #000; 
 }
 
 .nav.navbar-nav.navbar-right a:hover {
-	background-color: #333;
+	background-color: #FFC107;
+	color: #000; 
 }
 
 a:hover, a:focus {
@@ -41,7 +53,13 @@ a:hover, a:focus {
 }
 
 .navbar .navbar-brand {
-	color: #FFF; 
+	color: #FFF;
+	font-size: 30px; 
+}
+
+.navbar .navbar-brand:hover {
+	color: #FFC107;
+	/*font-size: 32px; */
 }
 
 #contact-wrapper {
@@ -84,7 +102,7 @@ a:hover, a:focus {
 
 .glyphicon, #address, #phone, #email {
 	font-size: 22px;
-	color: #388E3C; 
+	color: red; 
 }
 
 hr.custom-hr { 
@@ -92,15 +110,15 @@ hr.custom-hr {
   width: 50%; 
 }
 
-.navbar-header {
-    float: left;
-    padding: 15px;
-    text-align: center;
-    width: 100%;
-    font-size: 16px;
-}
+/*.navbar-header {*/
+/*    float: left;*/
+/*    padding: 15px;*/
+/*    text-align: center;*/
+/*    width: 100%;*/
+/*    font-size: 16px;*/
+/*}*/
 
-.navbar-brand {float:none;}
+/*.navbar-brand {float:none;}*/
 
 label {
 	color: #333;
@@ -295,3 +313,14 @@ button.send-btn:active:focus {
 }
 
 /* handling upload style */
+
+
+.footer {
+  position: absolute;
+  bottom: 0px;
+  background-color: #000;
+  width: 100%;
+  height: 8%; 
+  text-align: center;
+  padding-top: 15px; 
+}

@@ -14,5 +14,6 @@ def get_cosine_similarity(file_1, file_2):
 
         return round(cosim, 4)
 
-    except IOError:
+    except IOError as msg:
+        print msg
         return -1

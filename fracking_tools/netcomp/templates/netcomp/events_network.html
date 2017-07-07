@@ -18,23 +18,40 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
        <div class="container-fluid">
          <!-- Brand and toggle get grouped for better mobile display -->
-         <div class="navbar-header">
+        <div class="navbar-header">
            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
              <span class="sr-only">Toggle navigation</span>
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
            </button>
-           <a class="navbar-brand" href="#">NETCOMP > Event Attendance Networks</a>
-         </div>
-     
+           <a class="navbar-brand" href="{% url 'tools_home:index' %}">Fracking Tools</a>
+        </div>
+         
+        <ul class="nav navbar-nav navbar-right">
+            
+            <li class="dropdown netcomp">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">NETCOMP<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'netcomp:index' %}">NETCOMP: Home</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{% url 'netcomp:build_networks_from_events' %}">Build Network From Events</a></li>
+                    <li><a href="{% url 'netcomp:build_networks_from_pairs' %}">Build Network From Node Pairs</a></li>
+                    <!--<li role="separator" class="divider"></li>-->
+                    <!--<li><a href="{% url 'netcomp:build_networks_from_pairs' %}">Compare Networks</a></li>-->
+                </ul>
+            </li>
+            
+            <li><a href="{% url 'pairwise_comparisons:index' %}">PAIRCOMP</a></li>
+        </ul>
+
          <!-- Collect the nav links, forms, and other content for toggling -->
 
        </div><!-- /.container-fluid -->
     </nav>
     
     <div class="container"> 
-        <h1 class="text-center" id="page-message">Let's Get Started</h1><br>
+        <h1 class="text-center" id="page-message">Build Networks from Events</h1><br>
         <div id="network-build-container">
         <form action="{% url 'netcomp:file_upload' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -47,7 +64,9 @@
                 1. Choose Event Files
               </h3>
             </div>
-            <div class="panel-body">              
+            <div class="panel-body">
+                <p>Upload <a href="" data-toggle="modal" data-target="#event_spreadsheet_modal">event attendance spreadsheets</a>. They must be in <b>.csv</b> format.</p>
+                <p><b>Strict Name Format: </b> [UNIQUE LABEL]<b>_events.csv</b></p><br>
               {{ form.csv_file }}
             </div>
         </div><br>
@@ -61,6 +80,7 @@
               <h3 class="panel-title">2. Choose Output <b>.zip</b> Name</h3>
             </div>
             <div class="panel-body">
+                <p>The output .zip name should not include a file extension. By default, the output is a compressed <b>.zip</b> file.</p><br>                
                 <div class="col-md-4 center">
                     <input class="form-control" type="text" name="output_zip_name" id="output_zip_name" placeholder="Output .zip Name">
                 </div>
@@ -146,8 +166,8 @@
                 
             <dl>
                 <dt>How to name your file:</dt>
-                <dd>- [UNIQUE LABEL] network_relationships.csv</dd>
-                <dd>- Ex. <b>San Jose network_relationships.csv</b></dd>
+                <dd>- [UNIQUE LABEL]_events.csv</dd>
+                <dd>- Ex. <b>San Jose_events.csv</b></dd>
             </dl>     
                 
                 <table style="width:75%;" class="table table-bordered table-striped table-condensed center">
@@ -223,6 +243,12 @@
         </div>
         
 	</div> <!--container-->
-
+    
+    <footer class="footer">
+      <div class="container">
+        <p>Email: <a href="mailto:rahuezo@ucdavis.edu">rahuezo@ucdavis.edu</a></p>
+        <p class="text-muted">Copyright © 2017 Fracking Tools by Rudy Huezo</p>
+      </div>
+    </footer>
 </body>
 </html>
